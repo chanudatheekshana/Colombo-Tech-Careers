@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colombo Tech & Digital Job Vacancies Explorer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        },
+                        neutralbg: '#f8fafc',
+                        cardbg: '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 340px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-teal-600 text-white p-2 rounded-lg font-bold text-xl leading-none">
+                    LK
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">Colombo Tech Career Portal</h1>
+                    <p class="text-xs text-slate-500">Greater Colombo & Western Province Employment Intelligence</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
+                <a href="#overview" class="hover:text-teal-600 transition">Market Overview</a>
+                <a href="#vacancies" class="hover:text-teal-600 transition">Job Search</a>
+                <a href="#fit-analysis" class="hover:text-teal-600 transition">Skill Fit & Gaps</a>
+                <a href="#directory" class="hover:text-teal-600 transition">Employer Directory</a>
+                <a href="#roadmap" class="hover:text-teal-600 transition">Application Strategy</a>
+            </nav>
+            <div class="flex items-center">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                    ● Verified Active Jobs
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- SECTION 1: Executive Market Overview -->
+        <section id="overview" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Macroeconomic Market Overview & Talent Demand</h2>
+                <p class="mt-2 text-slate-600 text-sm sm:text-base">
+                    This interactive platform translates current market research into structured employment intelligence across Greater Colombo.
+                    Discover open software engineering, data analytics, digital design, and IT project roles, aligned directly with candidate skill profiles.
+                </p>
+            </div>
+
+            <!-- Key Metric Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-center">
+                    <span class="block text-3xl font-extrabold text-teal-600" id="stat-total-jobs">45+</span>
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Vacancies</span>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-center">
+                    <span class="block text-3xl font-extrabold text-teal-600">20</span>
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Target Job Titles</span>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-center">
+                    <span class="block text-3xl font-extrabold text-teal-600">4</span>
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tech Pillars</span>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-center">
+                    <span class="block text-3xl font-extrabold text-teal-600">25+</span>
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Verified Employers</span>
+                </div>
+            </div>
+
+            <!-- Visual Charts Container -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h3 class="text-sm font-bold text-slate-700 mb-2 text-center">Opportunity Distribution Across Functional Tiers</h3>
+                    <div class="chart-container">
+                        <canvas id="tierDistributionChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h3 class="text-sm font-bold text-slate-700 mb-2 text-center">Top Hiring Hubs in Greater Colombo</h3>
+                    <div class="chart-container">
+                        <canvas id="locationHubChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Interactive Job Search & Filter -->
+        <section id="vacancies" class="space-y-6">
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900">Active Job Vacancies Directory</h2>
+                    <p class="text-sm text-slate-600 mt-1">Filter active positions in Colombo by keywords, functional tier, or job title match.</p>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label for="searchInput" class="block text-xs font-semibold text-slate-700 uppercase mb-1">Search Keywords</label>
+                        <input type="text" id="searchInput" placeholder="e.g. React, Python, Power BI, Junior..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    </div>
+                    <div>
+                        <label for="tierSelect" class="block text-xs font-semibold text-slate-700 uppercase mb-1">Functional Tier</label>
+                        <select id="tierSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+                            <option value="ALL">All Categories</option>
+                            <option value="Tier 1">Tier 1: Software & Web Development</option>
+                            <option value="Tier 2">Tier 2: Data Analytics & BI</option>
+                            <option value="Tier 3">Tier 3: Design, UI/UX & Marketing</option>
+                            <option value="Tier 4">Tier 4: Business, Project & Ops</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="locationSelect" class="block text-xs font-semibold text-slate-700 uppercase mb-1">Location Filter</label>
+                        <select id="locationSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+                            <option value="ALL">All Locations</option>
+                            <option value="Colombo">Colombo (Central)</option>
+                            <option value="Kollupitiya">Kollupitiya / Colombo 03</option>
+                            <option value="Suburbs">Commuter Suburbs (Malabe, Nugegoda, Kottawa, etc.)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center text-xs text-slate-500 pt-2 border-t border-slate-100">
+                    <span>Showing <strong id="visibleCount" class="text-slate-800">0</strong> matching positions</span>
+                    <button id="resetFilters" class="text-teal-600 hover:text-teal-800 font-semibold underline">Reset Filters</button>
+                </div>
+            </div>
+
+            <!-- Job Cards Dynamic Grid -->
+            <div id="jobGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: Candidate Skill Fit & Keyword Gap Matrix -->
+        <section id="fit-analysis" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">20 Target Job Titles: Candidate Fit & Keyword Gap Analysis</h2>
+                <p class="text-sm text-slate-600 mt-1">
+                    Select a target job title from the 20 strategic profiles below to analyze verified skill alignments, critical keyword gaps, and practical bridge actions to maximize ATS conversion.
+                </p>
+            </div>
+
+            <!-- Tier Selector Pills -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-4">
+                <button class="fit-tier-btn active px-4 py-2 rounded-lg text-xs font-bold transition bg-teal-600 text-white" data-tier="1">Tier 1: Software & Web</button>
+                <button class="fit-tier-btn px-4 py-2 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200" data-tier="2">Tier 2: Data Analytics</button>
+                <button class="fit-tier-btn px-4 py-2 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200" data-tier="3">Tier 3: Design & Marketing</button>
+                <button class="fit-tier-btn px-4 py-2 rounded-lg text-xs font-bold transition bg-slate-100 text-slate-700 hover:bg-slate-200" data-tier="4">Tier 4: Business & Ops</button>
+            </div>
+
+            <!-- Interactive Gap Cards View -->
+            <div id="gapMatrixContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Dynamic injection of gap cards based on active tier -->
+            </div>
+        </section>
+
+        <!-- SECTION 4: Verified Employer & Contact Directory -->
+        <section id="directory" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900">Verified Employer Executive Directory</h2>
+                    <p class="text-sm text-slate-600 mt-1">Direct contact numbers, executive recruitment emails, and office locations for Colombo employers.</p>
+                </div>
+                <div class="w-full sm:w-64">
+                    <input type="text" id="dirSearchInput" placeholder="Search company or email..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 uppercase font-semibold border-b border-slate-200">
+                            <th class="p-3">Organization</th>
+                            <th class="p-3">Colombo Address</th>
+                            <th class="p-3">Contact Phone</th>
+                            <th class="p-3">Recruitment Email</th>
+                            <th class="p-3">Key Focus Areas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="directoryTableBody" class="divide-y divide-slate-100 text-slate-700">
+                        <!-- Dynamic Directory Rows -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Strategic Application Roadmap -->
+        <section id="roadmap" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">Strategic Application Roadmap</h2>
+                <p class="text-sm text-slate-600 mt-1">A step-by-step career development framework designed to maximize application-to-interview conversion in Colombo.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-teal-50/60 border border-teal-200 p-5 rounded-xl space-y-2 relative">
+                    <span class="absolute top-3 right-3 text-2xl font-black text-teal-200">01</span>
+                    <h3 class="text-sm font-bold text-teal-900">Phase 1: Portfolio Positioning</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Frame freelance work as structured commercial client projects. Present client workflows from objective analysis through design to deployment on GitHub Pages with mobile-first responsive execution.
+                    </p>
+                </div>
+                <div class="bg-teal-50/60 border border-teal-200 p-5 rounded-xl space-y-2 relative">
+                    <span class="absolute top-3 right-3 text-2xl font-black text-teal-200">02</span>
+                    <h3 class="text-sm font-bold text-teal-900">Phase 2: Dual-Track Submissions</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong>Track A:</strong> Software & Data Engineering roles (Python, React, SQL, Power BI).<br>
+                        <strong>Track B:</strong> Business Analysis & Operations (Budgeting, event management, workflow optimization).
+                    </p>
+                </div>
+                <div class="bg-teal-50/60 border border-teal-200 p-5 rounded-xl space-y-2 relative">
+                    <span class="absolute top-3 right-3 text-2xl font-black text-teal-200">03</span>
+                    <h3 class="text-sm font-bold text-teal-900">Phase 3: Keyword Gap Mitigation</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Bridge full-stack requirements by adding Express/Node backend authentication flow to frontend projects. Build DAX measures into Power BI projects for data analytics roles.
+                    </p>
+                </div>
+                <div class="bg-teal-50/60 border border-teal-200 p-5 rounded-xl space-y-2 relative">
+                    <span class="absolute top-3 right-3 text-2xl font-black text-teal-200">04</span>
+                    <h3 class="text-sm font-bold text-teal-900">Phase 4: Direct Executive Outreach</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Bypass standard web forms by contacting verified talent acquisition leads directly (`slcareers@syscolabs.com`, `peopleservices@lseg.com`). Include short cover letters and portfolio links.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
+            <p>Colombo Tech & Digital Employment Directory & Analytics Dashboard</p>
+            <p class="text-slate-500">Data compiled from verified recruitment hubs, tech firm directories, and regional industry reports in Greater Colombo, Sri Lanka.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // --- DATA SNIPPETS & REPOSITORY ---
+
+        const activeJobsData = [
+            // Tier 1
+            { title: "Software Engineer (Python)", company: "Innodata Lanka", tier: "Tier 1", location: "Colombo", reqs: "Python backend development, SQL, data processing pipelines", link: "ITPro Listing" },
+            { title: "Software Engineer", company: "Mira", tier: "Tier 1", location: "Colombo", reqs: "Full-stack software engineering, REST APIs, application logic", link: "ITPro Listing" },
+            { title: "Software Engineer Intern", company: "Alphintra", tier: "Tier 1", location: "Colombo", reqs: "JavaScript, Python, web development fundamentals, Git", link: "ITPro Listing" },
+            { title: "Junior Front-End Developer", company: "Quantix", tier: "Tier 1", location: "Suburbs", subLoc: "Pelawatta", reqs: "React, JavaScript, Responsive Web Design, HTML5/CSS3", link: "ITPro Listing" },
+            { title: "Intern Software Engineer", company: "BitSlize Concepts", tier: "Tier 1", location: "Colombo", reqs: "Web technologies, database basics, OOP, algorithm fundamentals", link: "ITPro Listing" },
+            { title: "Associate Software Engineer", company: "Zenzebz Technologies", tier: "Tier 1", location: "Suburbs", subLoc: "Nugegoda", reqs: "JavaScript, Web APIs, SQL DBMS, software troubleshooting", link: "ITPro Listing" },
+            { title: "Software Engineer Internship", company: "Zenzebz Technologies", tier: "Tier 1", location: "Suburbs", subLoc: "Nugegoda", reqs: "Object-Oriented Programming, HTML/CSS, JavaScript, Git", link: "ITPro Listing" },
+            { title: "Intern Software Engineer (PHP/Laravel)", company: "InBizSys (Pvt) Ltd", tier: "Tier 1", location: "Colombo", reqs: "PHP/Laravel or modern web frameworks, SQL, web integration", link: "ITPro / Job Board" },
+            { title: "Backend Engineer Intern", company: "Delivergate", tier: "Tier 1", location: "Colombo", reqs: "Python / Node.js, database architecture, API creation", link: "ITPro Listing" },
+            { title: "Intern Software Engineer", company: "Codimite", tier: "Tier 1", location: "Colombo", reqs: "Cloud-native engineering concepts, Python/JS, problem solving", link: "ITPro Listing" },
+            { title: "Internship Back-End Developer", company: "Neo Solution", tier: "Tier 1", location: "Colombo", reqs: "Java / PHP back-end architecture, SQL queries, REST integration", link: "ITPro Listing" },
+            { title: "Fullstack Internship", company: "UNIVISER", tier: "Tier 1", location: "Colombo", reqs: "Modern JavaScript frameworks (React/Node), database integration", link: "ITPro Listing" },
+            { title: "Intern Software Engineer", company: "Knovik", tier: "Tier 1", location: "Colombo", reqs: "Software design, algorithms, web stack execution, Git", link: "ITPro Listing" },
+            { title: "Software Engineering Intern", company: "JRC Software", tier: "Tier 1", location: "Colombo", reqs: "Web development stack, SQL, UI responsiveness, teamwork", link: "ITPro Listing" },
+            { title: "Associate Software Engineer", company: "Kangaro Tech", tier: "Tier 1", location: "Colombo", reqs: "Java, Spring Boot, OOP design patterns, database integration", link: "TopJobs Listing" },
+            { title: "Full Stack Web Developer", company: "XERO Lanka Pvt Ltd", tier: "Tier 1", location: "Kollupitiya", subLoc: "Colombo 03", reqs: "JavaScript frameworks, web application architecture, databases", link: "TopJobs Listing" },
+            { title: "Intern & Associate - Software Engineer", company: "Muve Mobility (Pvt) Ltd", tier: "Tier 1", location: "Colombo", reqs: "Mobile and web app technologies, algorithms, version control", link: "TopJobs Listing" },
+
+            // Tier 2
+            { title: "Business Intelligence Analyst", company: "Pan Asia Banking Corporation PLC", tier: "Tier 2", location: "Colombo", reqs: "SQL databases, BI toolsets, data modeling, financial reporting", link: "XpressJobs Listing" },
+            { title: "Data Analyst - Power BI", company: "Syntrad Labs (Pvt) Ltd", tier: "Tier 2", location: "Colombo", reqs: "Power BI dashboard building, DAX, data transformations, SQL", link: "ITPro Listing" },
+            { title: "Associate Data Analyst", company: "Codimite", tier: "Tier 2", location: "Colombo", reqs: "Data analysis with Python/SQL, report visualization, metrics", link: "ITPro / TopJobs" },
+            { title: "Business Data Analyst Intern", company: "Residue Solutions", tier: "Tier 2", location: "Suburbs", subLoc: "Jaela", reqs: "Data gathering, MS Excel, SQL basic queries, data presentation", link: "ITPro Listing" },
+            { title: "Associate Data Analyst", company: "Affixcon Pty Ltd", tier: "Tier 2", location: "Colombo", subLoc: "Colombo 01", reqs: "Data compliance analytics, structured query scripting, Excel", link: "TopJobs Listing" },
+            { title: "Executive - MIS", company: "Merchant Bank of Sri Lanka", tier: "Tier 2", location: "Kollupitiya", subLoc: "Colombo 03", reqs: "MIS reporting, database management, Excel modeling, SQL", link: "TopJobs Listing" },
+            { title: "Associate - Data Analyst / BI", company: "Port City BPO", tier: "Tier 2", location: "Colombo", reqs: "Business intelligence reporting, visual design, SQL, spreadsheets", link: "ITPro Listing" },
+            { title: "Business Analyst / Data Analyst", company: "Finetech Consultancy", tier: "Tier 2", location: "Colombo", reqs: "Enterprise data workflow mapping, reporting, client solutions", link: "ITPro Listing" },
+            { title: "Data Analyst", company: "SevenX", tier: "Tier 2", location: "Suburbs", subLoc: "Malabe", reqs: "Quantitative data analysis, Python/Pandas, BI dashboarding", link: "ITPro Listing" },
+            { title: "Intern, Capital Markets", company: "LSEG (London Stock Exchange Group)", tier: "Tier 2", location: "Colombo", subLoc: "Maradana / Malabe", reqs: "Data analytics, SQL, Power BI, Python basics, financial data", link: "LSEG Career Hub" },
+
+            // Tier 3
+            { title: "Creative Graphic Designer", company: "BDO Partners", tier: "Tier 3", location: "Colombo", subLoc: "Colombo 02", reqs: "Visual identity, marketing collateral, graphic design suite", link: "TopJobs Listing" },
+            { title: "Graphic Designer", company: "Stelacom (Pvt) Ltd", tier: "Tier 3", location: "Colombo", reqs: "Brand communications, social graphics, layout engineering", link: "XpressJobs Listing" },
+            { title: "Graphic Designer", company: "Bayside Lanka", tier: "Tier 3", location: "Suburbs", subLoc: "Dehiwala", reqs: "Creative asset design, digital media banners, visual identity", link: "TopJobs Listing" },
+            { title: "Creative Graphic Designer", company: "Eswaran Brothers Exports", tier: "Tier 3", location: "Colombo", subLoc: "Colombo 14", reqs: "Corporate marketing collateral, typography, product design", link: "TopJobs Listing" },
+            { title: "Executive Graphic Designer", company: "ESOL College International", tier: "Tier 3", location: "Suburbs", subLoc: "Pannipitiya", reqs: "Educational marketing materials, digital ad designs, social media", link: "TopJobs Listing" },
+            { title: "Graphic Designer & Video Editor", company: "Levo Media", tier: "Tier 3", location: "Suburbs", subLoc: "Maharagama", reqs: "Content creation, graphic design, video layout editing", link: "TopJobs Listing" },
+            { title: "Digital Marketing Executive", company: "Link Natural Products", tier: "Tier 3", location: "Colombo", reqs: "Social media strategy, client digital campaigns, advertising", link: "XpressJobs Listing" },
+            { title: "Junior Creative Designer & Marketer", company: "Deeser Studios", tier: "Tier 3", location: "Colombo", reqs: "Digital media creation, UI creative assets, campaign support", link: "XpressJobs Listing" },
+            { title: "Junior Social Media Executive", company: "SR Rent A Car (Pvt) Ltd", tier: "Tier 3", location: "Colombo", reqs: "Content planning, audience outreach, visual posting management", link: "XpressJobs Listing" },
+
+            // Tier 4
+            { title: "Business Analyst / PM Intern", company: "Omnilogics Limited", tier: "Tier 4", location: "Colombo", reqs: "Business documentation, project coordination, Agile tracking", link: "ITPro Listing" },
+            { title: "Associate Business Analyst", company: "Afisol (Pvt) Ltd", tier: "Tier 4", location: "Suburbs", subLoc: "Kottawa", reqs: "Requirement documentation, client workflows, process mapping", link: "TopJobs Listing" },
+            { title: "Business Analyst", company: "MG Consultants", tier: "Tier 4", location: "Colombo", reqs: "Digital transformation consultancy, requirement specification", link: "XpressJobs Listing" },
+            { title: "Associate Business Analyst", company: "Haulmatic Technologies", tier: "Tier 4", location: "Colombo", reqs: "Supply chain business analysis, user story creation, testing", link: "ITPro Listing" },
+            { title: "Intern - Business Analyst", company: "eArrow (Pvt) LTD", tier: "Tier 4", location: "Colombo", reqs: "IT project documentation, wireframing basics, client interaction", link: "ITPro Listing" },
+            { title: "Full-Time Pre-Sales Intern", company: "CreativeX Technology", tier: "Tier 4", location: "Colombo", reqs: "Tech presentation, client requirement gathering, solution pitch", link: "ITPro Listing" },
+            { title: "Intern Business Analyst", company: "Olee AI LLC", tier: "Tier 4", location: "Suburbs", subLoc: "Malabe", reqs: "AI product documentation, workflow modeling, data analysis", link: "ITPro Listing" },
+            { title: "Customer Support Intern / Trainee", company: "Simplebooks (Pvt) Ltd", tier: "Tier 4", location: "Colombo", reqs: "Client workflow assistance, customer onboarding, communication", link: "XpressJobs Listing" },
+            { title: "Intern - Group Business Operations", company: "Dialog Axiata PLC", tier: "Tier 4", location: "Colombo", reqs: "Operational coordination, process optimization, corporate reporting", link: "XpressJobs Listing" },
+            { title: "Intern - Market Strategy & Planning", company: "Hayleys Consumer Products", tier: "Tier 4", location: "Colombo", reqs: "Market analysis, strategic planning support, report generation", link: "XpressJobs Listing" }
+        ];
+
+        const target20FitGaps = {
+            "1": [
+                {
+                    title: "1. Software Engineering Intern",
+                    fit: "Core Fit",
+                    aligned: "Python, JavaScript, React, Git, SQL, MongoDB, HTML5, CSS3, Data Structures, Algorithms",
+                    gaps: "Java, Node.js, Unit Testing, REST APIs, SDLC",
+                    action: "Highlight university coursework in SDLC/Architecture and emphasize RESTful API integrations built during client web projects."
+                },
+                {
+                    title: "2. Associate / Trainee Software Engineer",
+                    fit: "Core Fit",
+                    aligned: "Software Engineering principles, Python, JavaScript, SQL, Git, DBMS, Software Architecture",
+                    gaps: "OOP depth, Debugging pipelines, Code Review standards, CI/CD",
+                    action: "Emphasize GitHub version control practices and structured modular architecture implemented in published project repositories."
+                },
+                {
+                    title: "3. Junior Front-End Developer (React)",
+                    fit: "Core Fit",
+                    aligned: "React, JavaScript, HTML5, CSS3, Responsive Design, Mobile-First Web Design, Git, Firebase",
+                    gaps: "TypeScript, Redux, Tailwind CSS, Accessibility (WCAG)",
+                    action: "Showcase mobile-first responsive portfolio sites and emphasize client UI optimization experience."
+                },
+                {
+                    title: "4. Junior Web Developer",
+                    fit: "Core Fit",
+                    aligned: "HTML5, CSS3, JavaScript, Responsive Design, GitHub Pages, Web Development, Portfolio Projects",
+                    gaps: "WordPress CMS, Node.js backend, SEO basics, Bootstrap",
+                    action: "Leverage proven experience delivering commercial client websites via independent brand service platforms."
+                },
+                {
+                    title: "5. Full-Stack Developer Intern",
+                    fit: "Core Fit",
+                    aligned: "React, MongoDB, Firebase, JavaScript, SQL (MySQL), Git",
+                    gaps: "Express, Node.js (MERN stack completion), Authentication, Cloud Deployment",
+                    action: "Complete MERN-stack authentication flow implementations to solidify full-stack credentials."
+                },
+                {
+                    title: "6. Junior Python Developer",
+                    fit: "Core Fit",
+                    aligned: "Python programming, Pandas, NumPy, SQL, Git",
+                    gaps: "Flask/Django frameworks, pytest unit testing, Automation scripting",
+                    action: "Highlight data manipulation scripts and build basic Flask API endpoints to demonstrate framework familiarity."
+                }
+            ],
+            "2": [
+                {
+                    title: "7. Junior Data Analyst / Data Analyst Intern",
+                    fit: "Strong Fit",
+                    aligned: "Python, Pandas, NumPy, SQL, Power BI, MS Excel, Data Visualization, Data Analysis",
+                    gaps: "Data Cleaning pipelines, Advanced Dashboards, KPIs, Tableau",
+                    action: "Frame Power BI visualization projects around business KPIs and automated reporting workflows."
+                },
+                {
+                    title: "8. Business Intelligence (BI) Analyst Intern",
+                    fit: "Strong Fit",
+                    aligned: "Power BI, SQL, MS Excel, Data Visualization, Plotly",
+                    gaps: "DAX language, ETL processes, Data Modeling, Stakeholder Reporting",
+                    action: "Formalize data modeling concepts learned in DBMS coursework into published Power BI dashboards."
+                },
+                {
+                    title: "9. Data Visualization Analyst",
+                    fit: "Strong Fit",
+                    aligned: "Matplotlib, Plotly, Power BI, Data Visualization, Python",
+                    gaps: "Tableau, Advanced Data Storytelling, Dashboard Design frameworks",
+                    action: "Position graphic design expertise alongside Matplotlib/Plotly charting skills to highlight visual accuracy."
+                },
+                {
+                    title: "10. Marketing Analyst (Junior)",
+                    fit: "Strong Fit",
+                    aligned: "Data Analysis, MS Excel, Power BI, Digital Marketing, Budget Planning",
+                    gaps: "Google Analytics, Campaign A/B Testing, ROI calculations, SEO/SEM",
+                    action: "Synthesize digital marketing campaign results from entrepreneurial ventures into quantitative performance metrics."
+                }
+            ],
+            "3": [
+                {
+                    title: "11. Web Designer / UI Designer (Junior)",
+                    fit: "Strong Fit",
+                    aligned: "Mobile-First Web Design, Graphic Design, Brand Identity, HTML5, CSS3, Responsive Design",
+                    gaps: "Figma, Adobe XD, UI/UX Wireframing, Design Systems",
+                    action: "Export client web design layouts into structured Figma design files to prove standard design tool fluency."
+                },
+                {
+                    title: "12. Graphic Designer / Brand Designer",
+                    fit: "Strong Fit",
+                    aligned: "Graphic Design, Brand Identity, Social Media Ad Design, Visual Communication",
+                    gaps: "Adobe Photoshop, Illustrator, Advanced Typography, Brand Guidelines",
+                    action: "Present a commercial portfolio demonstrating multi-channel social media ad design and brand systems."
+                },
+                {
+                    title: "13. Digital Marketing Executive",
+                    fit: "Strong Fit",
+                    aligned: "Digital Marketing, Social Media Ad Design, Marketing Strategy, Client Campaigns",
+                    gaps: "Meta Ads Manager, Google Ads, Content Marketing, Email Marketing",
+                    action: "Highlight client acquisition and campaign management track records built through private business ventures."
+                },
+                {
+                    title: "14. Social Media / Content Executive",
+                    fit: "Strong Fit",
+                    aligned: "Social Media, Content Creation, Brand Identity, Visual Communication, Public Outreach",
+                    gaps: "Content Calendar management, Copywriting, Meta Business Suite",
+                    action: "Emphasize leadership of public visibility committees and student branch communications at university levels."
+                },
+                {
+                    title: "15. Webmaster / Web Content Executive",
+                    fit: "Strong Fit",
+                    aligned: "Webmaster experience, Digital Content Management, Online Platforms, Site Management",
+                    gaps: "WordPress CMS, SEO optimization, Site Maintenance protocols",
+                    action: "Showcase direct experience managing digital platforms and IEEE chapter websites as verified Webmaster."
+                }
+            ],
+            "4": [
+                {
+                    title: "16. Junior Business Analyst",
+                    fit: "Good Fit",
+                    aligned: "Data Analysis, Financial Management, SQL, Power BI, Client Coordination",
+                    gaps: "BRD documentation, User Stories, Process Mapping, Jira, UAT",
+                    action: "Translate 6-step client workflow methodology into formal Business Requirements Document (BRD) formats."
+                },
+                {
+                    title: "17. Junior Project Coordinator",
+                    fit: "Good Fit",
+                    aligned: "Project Management, Budgeting, Vendor Coordination, Team Leadership, Event Coordination",
+                    gaps: "Agile/Scrum ceremonies, Risk Management, Jira/Trello boards",
+                    action: "Leverage chairperson leadership experience managing large-scale university events, budgets, and logistics."
+                },
+                {
+                    title: "18. Event Coordinator / Event Executive",
+                    fit: "Good Fit",
+                    aligned: "Event Organization, Budget Planning, Vendor Coordination, Logistics, Event Leadership",
+                    gaps: "Corporate Sponsorship sourcing, Formal Post-Event Reporting",
+                    action: "Highlight full financial accountability and committee leadership for major campus musical and athletic events."
+                },
+                {
+                    title: "19. Associate Product Manager / Product Analyst",
+                    fit: "Stretch Fit",
+                    aligned: "Client Workflow Analysis, Marketing Direction, Data Analysis, Entrepreneurship",
+                    gaps: "Product Roadmaps, User Research, Agile Sprint planning, PRDs",
+                    action: "Frame website product creation packages and client feature onboarding as end-to-end product delivery."
+                },
+                {
+                    title: "20. Business Development Executive (Tech)",
+                    fit: "Good Fit",
+                    aligned: "Entrepreneurial Founder, Client Acquisition, Marketing Strategy, Service Pricing",
+                    gaps: "B2B Lead Generation, CRM software (Salesforce/HubSpot), Formal Proposals",
+                    action: "Emphasize revenue generation, pricing strategy development, and end-to-end sales management for tech services."
+                }
+            ]
+        };
+
+        const employerDirectory = [
+            {
+                name: "Sysco LABS Sri Lanka",
+                address: "55A, Srimath Anagarika Dharmapala Mawatha, Colombo 03",
+                phone: "+94 11 202 4500",
+                email: "slcareers@syscolabs.com / slinfo@sysco.com",
+                focus: "Enterprise Software, Full-Stack, Quality Engineering, AI"
+            },
+            {
+                name: "99x (99x Technology)",
+                address: "Colombo 03, Western Province",
+                phone: "+94 11 472 1194",
+                email: "hello.norway@99x.io / guilherme.pereira@99x.io",
+                focus: "Product Engineering, React, Node, Web Solutions, Marketing"
+            },
+            {
+                name: "London Stock Exchange Group (LSEG)",
+                address: "Trace Expert City, Colombo 10 / Malabe",
+                phone: "+94 11 241 6020 / +94 11 241 6000",
+                email: "peopleservices@lseg.com",
+                focus: "Financial Software, Capital Markets Internships, Data & BI"
+            },
+            {
+                name: "Pearson Lanka (Pvt) Ltd",
+                address: "Colombo, Western Province",
+                phone: "+94 11 738 8488",
+                email: "careers@pearson.com / sitateam@pearson.com",
+                focus: "Educational Technology, Software Management, HR Internships"
+            },
+            {
+                name: "Surge Global / Code Surge",
+                address: "215 R A De Mel Mawatha, Colombo 03",
+                phone: "+94 72 565 XXXX / +94 76 900 XXXX",
+                email: "careers@codesurge.global",
+                focus: "Growth Marketing, Digital Strategy, Full-Stack Engineering"
+            },
+            {
+                name: "Calcey Technologies",
+                address: "Bay #8, Trace Expert City, Tripoli Market Square, Colombo 10",
+                phone: "+94 11 282 7560",
+                email: "Web Application Portal (calcey.com)",
+                focus: "Agile Web & Mobile Development, Software QA, UI/UX"
+            },
+            {
+                name: "CodeGen International",
+                address: "29, Braybrooke Street, Colombo 02",
+                phone: "+94 11 202 4400 / +94 11 247 0740",
+                email: "sales@codegen.net",
+                focus: "Travel Software Architecture, AI Systems, Enterprise Dev"
+            },
+            {
+                name: "Simplebooks (Pvt) Ltd",
+                address: "Colombo, Western Province",
+                phone: "+94 11 406 0909",
+                email: "Web Portal (simplebooks.com)",
+                focus: "Business Services, Software Trainees, Customer Support"
+            },
+            {
+                name: "Yadimen Consulting",
+                address: "Remote / Colombo Operations",
+                phone: "Direct Digital Contact",
+                email: "contactus@yadimen.com",
+                focus: "IT Business Development, Client Acquisition, Sales"
+            },
+            {
+                name: "Zone24x7 Sri Lanka",
+                address: "Colombo, Western Province",
+                phone: "Direct Web Portal",
+                email: "Contact Form (zone24x7.com)",
+                focus: "Enterprise Systems, Embedded Tech, Full-Stack Engineering"
+            }
+        ];
+
+        // --- CORE APPLICATION LOGIC ---
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initCharts();
+            renderJobs(activeJobsData);
+            renderGapMatrix("1");
+            renderDirectory(employerDirectory);
+            setupEventListeners();
+        });
+
+        // 1. Chart Initialization
+        function initCharts() {
+            // Chart 1: Tier Distribution Bar Chart
+            const tierCtx = document.getElementById('tierDistributionChart').getContext('2d');
+            new Chart(tierCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Tier 1 (Software)', 'Tier 2 (Data/BI)', 'Tier 3 (Design/Marketing)', 'Tier 4 (Biz/Ops)'],
+                    datasets: [{
+                        label: 'Active Opportunities',
+                        data: [17, 10, 9, 10],
+                        backgroundColor: ['#0d9488', '#0284c7', '#8b5cf6', '#f59e0b'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
+                    }
+                }
+            });
+
+            // Chart 2: Location Doughnut Chart
+            const locCtx = document.getElementById('locationHubChart').getContext('2d');
+            new Chart(locCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Central Colombo', 'Kollupitiya (Col 03)', 'Trace Expert City / Col 10', 'Commuter Suburbs'],
+                    datasets: [{
+                        data: [22, 6, 5, 13],
+                        backgroundColor: ['#14b8a6', '#06b6d4', '#6366f1', '#f1f5f9'],
+                        borderColor: '#cbd5e1',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        // 2. Render Jobs Grid
+        function renderJobs(jobs) {
+            const grid = document.getElementById("jobGrid");
+            document.getElementById("visibleCount").innerText = jobs.length;
+
+            if (jobs.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 text-sm">No vacancies match your filter criteria. Try clearing search filters.</div>`;
+                return;
+            }
+
+            grid.innerHTML = jobs.map(job => {
+                let tierBadgeColor = "bg-teal-100 text-teal-800";
+                if (job.tier === "Tier 2") tierBadgeColor = "bg-sky-100 text-sky-800";
+                if (job.tier === "Tier 3") tierBadgeColor = "bg-purple-100 text-purple-800";
+                if (job.tier === "Tier 4") tierBadgeColor = "bg-amber-100 text-amber-800";
+
+                return `
+                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${tierBadgeColor}">
+                                    ${job.tier}
+                                </span>
+                                <span class="text-xs text-slate-400">${job.location}${job.subLoc ? ' (' + job.subLoc + ')' : ''}</span>
+                            </div>
+                            <h3 class="text-base font-bold text-slate-900 leading-snug">${job.title}</h3>
+                            <p class="text-xs font-semibold text-teal-700">${job.company}</p>
+                            <p class="text-xs text-slate-600 mt-3 leading-relaxed">
+                                <strong class="text-slate-700">Requirements:</strong> ${job.reqs}
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                            <span class="text-slate-400 text-[11px]">${job.link}</span>
+                            <span class="text-teal-600 font-semibold flex items-center gap-1">
+                                Active Opportunity
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        // 3. Render Gap Matrix
+        function renderGapMatrix(tier) {
+            const container = document.getElementById("gapMatrixContainer");
+            const items = target20FitGaps[tier] || [];
+
+            container.innerHTML = items.map(item => `
+                <div class="bg-slate-50 border border-slate-200 p-5 rounded-xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-sm font-bold text-slate-900">${item.title}</h3>
+                        <span class="px-2 py-0.5 rounded text-xs font-bold ${item.fit === 'Core Fit' ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-100 text-sky-800'}">
+                            ${item.fit}
+                        </span>
+                    </div>
+                    <div class="space-y-1 text-xs">
+                        <p><strong class="text-emerald-700">Verified Alignments:</strong> ${item.aligned}</p>
+                        <p><strong class="text-rose-700">Keyword Gaps:</strong> ${item.gaps}</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-200 text-xs bg-white p-3 rounded-lg border">
+                        <strong class="text-slate-800 block mb-1">Strategic Bridge Action:</strong>
+                        <span class="text-slate-600">${item.action}</span>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        // 4. Render Employer Directory Table
+        function renderDirectory(directory) {
+            const tbody = document.getElementById("directoryTableBody");
+            tbody.innerHTML = directory.map(emp => `
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-3 font-bold text-slate-900">${emp.name}</td>
+                    <td class="p-3 text-slate-600">${emp.address}</td>
+                    <td class="p-3 text-slate-600 font-mono">${emp.phone}</td>
+                    <td class="p-3 text-teal-700 font-medium font-mono">${emp.email}</td>
+                    <td class="p-3 text-slate-500">${emp.focus}</td>
+                </tr>
+            `).join("");
+        }
+
+        // 5. Setup Filter and Interaction Event Listeners
+        function setupEventListeners() {
+            const searchInput = document.getElementById("searchInput");
+            const tierSelect = document.getElementById("tierSelect");
+            const locationSelect = document.getElementById("locationSelect");
+            const resetBtn = document.getElementById("resetFilters");
+
+            function filterJobs() {
+                const query = searchInput.value.toLowerCase();
+                const selectedTier = tierSelect.value;
+                const selectedLoc = locationSelect.value;
+
+                const filtered = activeJobsData.filter(job => {
+                    const matchesSearch = job.title.toLowerCase().includes(query) ||
+                                          job.company.toLowerCase().includes(query) ||
+                                          job.reqs.toLowerCase().includes(query);
+                    const matchesTier = (selectedTier === "ALL" || job.tier === selectedTier);
+
+                    let matchesLoc = true;
+                    if (selectedLoc === "Colombo") matchesLoc = (job.location === "Colombo");
+                    if (selectedLoc === "Kollupitiya") matchesLoc = (job.location === "Kollupitiya" || job.subLoc === "Colombo 03");
+                    if (selectedLoc === "Suburbs") matchesLoc = (job.location === "Suburbs");
+
+                    return matchesSearch && matchesTier && matchesLoc;
+                });
+
+                renderJobs(filtered);
+            }
+
+            searchInput.addEventListener("input", filterJobs);
+            tierSelect.addEventListener("change", filterJobs);
+            locationSelect.addEventListener("change", filterJobs);
+
+            resetBtn.addEventListener("click", () => {
+                searchInput.value = "";
+                tierSelect.value = "ALL";
+                locationSelect.value = "ALL";
+                renderJobs(activeJobsData);
+            });
+
+            // Tier button switcher for Gap Matrix
+            const fitBtns = document.querySelectorAll(".fit-tier-btn");
+            fitBtns.forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    fitBtns.forEach(b => {
+                        b.classList.remove("bg-teal-600", "text-white");
+                        b.classList.add("bg-slate-100", "text-slate-700");
+                    });
+                    btn.classList.remove("bg-slate-100", "text-slate-700");
+                    btn.classList.add("bg-teal-600", "text-white");
+
+                    const tier = btn.getAttribute("data-tier");
+                    renderGapMatrix(tier);
+                });
+            });
+
+            // Directory Search
+            const dirSearch = document.getElementById("dirSearchInput");
+            dirSearch.addEventListener("input", (e) => {
+                const q = e.target.value.toLowerCase();
+                const filteredDir = employerDirectory.filter(emp =>
+                    emp.name.toLowerCase().includes(q) ||
+                    emp.email.toLowerCase().includes(q) ||
+                    emp.focus.toLowerCase().includes(q)
+                );
+                renderDirectory(filteredDir);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+/* ============================================================
+   styles.css — Colombo Tech Careers | Custom Styles
+   ============================================================ */
+
+/* --- Custom Scrollbar --- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: #0d9488;
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #0f766e;
+}
+
+/* --- Chart Container --- */
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+    max-height: 380px;
+}
+@media (min-width: 768px) {
+    .chart-container {
+        height: 340px;
+    }
+}
+
+/* --- Floating Keyframe Animation --- */
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(2deg); }
+    50%       { transform: translateY(-10px) rotate(2deg); }
+}
+@keyframes floatBadge1 {
+    0%, 100% { transform: translateY(0px) rotate(-3deg); }
+    50%       { transform: translateY(-8px) rotate(-3deg); }
+}
+@keyframes floatBadge2 {
+    0%, 100% { transform: translateY(0px) rotate(3deg); }
+    50%       { transform: translateY(-6px) rotate(3deg); }
+}
+
+.mockup-card-main {
+    animation: float 5s ease-in-out infinite;
+}
+.mockup-badge-1 {
+    animation: floatBadge1 4s ease-in-out infinite;
+}
+.mockup-badge-2 {
+    animation: floatBadge2 6s ease-in-out infinite;
+}
+
+/* Pause animations on hover */
+.mockup-card-main:hover,
+.mockup-badge-1:hover,
+.mockup-badge-2:hover {
+    animation-play-state: paused;
+}
+
+/* --- Background Blob Pulse Animation --- */
+@keyframes blobPulse {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50%       { transform: scale(1.05); opacity: 0.55; }
+}
+.bg-blob {
+    animation: blobPulse 8s ease-in-out infinite;
+}
+.bg-blob:nth-child(2) { animation-delay: 2s; }
+.bg-blob:nth-child(3) { animation-delay: 4s; }
+
+/* --- Tier Badge Active State --- */
+.fit-tier-btn.active {
+    background-color: #0f172a;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+}
+
+/* --- Job Card Hover Accent Bar --- */
+.job-card .accent-bar {
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+.job-card:hover .accent-bar {
+    opacity: 1;
+}
+
+/* --- Glassmorphism Header Scroll Enhancement --- */
+header.scrolled {
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 20px rgba(13, 148, 136, 0.08);
+}
+
+/* --- Directory Table Row Highlight --- */
+#directoryTableBody tr:hover td {
+    background-color: rgba(240, 253, 250, 0.8);
+}
+
+/* --- Responsive Utility --- */
+@media (max-width: 640px) {
+    .mockup-card-main,
+    .mockup-badge-1,
+    .mockup-badge-2 {
+        display: none;
+    }
+}
+

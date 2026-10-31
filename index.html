@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colombo Tech &amp; Digital Job Vacancies Explorer</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Theme Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50:  '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        },
+                        slate: {
+                            900: '#0f172a',
+                        }
+                    },
+                    boxShadow: {
+                        'soft':       '0 20px 40px -15px rgba(13, 148, 136, 0.08)',
+                        'floating':   '0 30px 60px -15px rgba(15, 23, 42, 0.1)',
+                        'inner-glow': 'inset 0 0 20px rgba(20, 184, 166, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- =========================================================
+         Decorative Background Blobs
+         ========================================================= -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="bg-blob absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-teal-200/40 rounded-full blur-3xl"></div>
+        <div class="bg-blob absolute top-[20%] right-[-10%] w-[30vw] h-[30vw] bg-cyan-200/30 rounded-full blur-3xl"></div>
+        <div class="bg-blob absolute bottom-[10%] left-[20%] w-[35vw] h-[35vw] bg-blue-100/40 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- =========================================================
+         Header Navigation (Glassmorphism)
+         ========================================================= -->
+    <header class="bg-white/70 backdrop-blur-lg border-b border-white/20 sticky top-0 z-50 shadow-sm transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-br from-teal-500 to-cyan-600 text-white p-2.5 rounded-xl font-black text-xl leading-none shadow-lg shadow-teal-500/30">
+                    LK
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold text-slate-900 tracking-tight leading-tight">Colombo Tech Careers</h1>
+                    <p class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Employment Intelligence</p>
+                </div>
+            </div>
+            <!-- Nav -->
+            <nav class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
+                <a href="#overview"    class="hover:text-teal-600 transition-colors">Overview</a>
+                <a href="#vacancies"   class="hover:text-teal-600 transition-colors">Job Search</a>
+                <a href="#fit-analysis" class="hover:text-teal-600 transition-colors">Skill Fit</a>
+                <a href="#directory"   class="hover:text-teal-600 transition-colors">Employers</a>
+                <a href="#roadmap"     class="hover:text-teal-600 transition-colors">Strategy</a>
+            </nav>
+            <!-- Status Badge -->
+            <div class="flex items-center">
+                <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold bg-teal-50 text-teal-700 border border-teal-200 shadow-sm">
+                    <span class="w-2 h-2 bg-teal-500 rounded-full mr-2 animate-pulse"></span>
+                    Verified Active Jobs
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========================================================
+         Main Content
+         ========================================================= -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+        <!-- SECTION 1: Executive Market Overview (Hero) -->
+        <section id="overview" class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            <!-- Left: Text & Stat Cards -->
+            <div class="space-y-8">
+                <div class="space-y-4">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-bold uppercase tracking-wide">
+                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                        Market Intelligence
+                    </div>
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
+                        Explore Top Tech <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-500">Opportunities</span> in Colombo.
+                    </h2>
+                    <p class="text-slate-600 text-base sm:text-lg leading-relaxed max-w-lg">
+                        Translate current market research into structured employment intelligence across Greater Colombo. Discover open software, data, design, and IT project roles aligned with your skills.
+                    </p>
+                </div>
+
+                <!-- Bento Box Stat Cards -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-3xl shadow-soft border border-slate-100 relative overflow-hidden group hover:-translate-y-1 transition duration-300">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-teal-50 rounded-bl-full z-0 transition-transform group-hover:scale-110"></div>
+                        <div class="relative z-10">
+                            <span class="block text-3xl font-black text-slate-900" id="stat-total-jobs">46</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1 block">Active Vacancies</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-3xl shadow-soft border border-slate-100 relative overflow-hidden group hover:-translate-y-1 transition duration-300">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-cyan-50 rounded-bl-full z-0 transition-transform group-hover:scale-110"></div>
+                        <div class="relative z-10">
+                            <span class="block text-3xl font-black text-slate-900">20</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1 block">Target Job Titles</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-3xl shadow-soft border border-slate-100 relative overflow-hidden group hover:-translate-y-1 transition duration-300">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-blue-50 rounded-bl-full z-0 transition-transform group-hover:scale-110"></div>
+                        <div class="relative z-10">
+                            <span class="block text-3xl font-black text-slate-900">4</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1 block">Tech Pillars</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-3xl shadow-soft border border-slate-100 relative overflow-hidden group hover:-translate-y-1 transition duration-300">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-indigo-50 rounded-bl-full z-0 transition-transform group-hover:scale-110"></div>
+                        <div class="relative z-10">
+                            <span class="block text-3xl font-black text-slate-900">25+</span>
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1 block">Verified Employers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Pure CSS Floating Dashboard Mockup -->
+            <div class="relative hidden lg:block h-[500px]">
+                <!-- Main Mockup Card -->
+                <div class="mockup-card-main absolute right-0 top-10 w-[400px] bg-white rounded-[2rem] shadow-floating border border-slate-100 p-6 hover:rotate-0 transition-transform duration-500">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="h-2 w-24 bg-slate-200 rounded-full mb-2"></div>
+                                <div class="h-2 w-16 bg-slate-100 rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="h-8 w-8 rounded-full bg-slate-50"></div>
+                    </div>
+                    <!-- CSS Bar Chart Mockup -->
+                    <div class="h-32 bg-slate-50 rounded-2xl mb-6 p-4 flex items-end space-x-2">
+                        <div class="w-1/5 bg-teal-200 rounded-t-md h-1/2"></div>
+                        <div class="w-1/5 bg-teal-300 rounded-t-md h-3/4"></div>
+                        <div class="w-1/5 bg-teal-400 rounded-t-md h-full"></div>
+                        <div class="w-1/5 bg-teal-500 rounded-t-md h-2/3"></div>
+                        <div class="w-1/5 bg-teal-600 rounded-t-md h-4/5"></div>
+                    </div>
+                    <!-- List Items -->
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl shadow-sm">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-lg bg-cyan-50 flex items-center justify-center">
+                                    <span class="text-xs font-bold text-cyan-600">JS</span>
+                                </div>
+                                <div class="h-2 w-20 bg-slate-200 rounded-full"></div>
+                            </div>
+                            <div class="h-6 w-12 bg-teal-50 rounded-full"></div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl shadow-sm">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                                    <span class="text-xs font-bold text-blue-600">PY</span>
+                                </div>
+                                <div class="h-2 w-28 bg-slate-200 rounded-full"></div>
+                            </div>
+                            <div class="h-6 w-12 bg-teal-50 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Badge 1: Profile Matched -->
+                <div class="mockup-badge-1 absolute left-0 top-24 bg-white p-4 rounded-2xl shadow-floating border border-slate-100 flex items-center space-x-3 hover:rotate-0 transition-transform duration-300">
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-900">Profile Matched</p>
+                        <p class="text-[10px] text-slate-500">Excellent Fit</p>
+                    </div>
+                </div>
+
+                <!-- Floating Badge 2: Total Applied -->
+                <div class="mockup-badge-2 absolute right-10 bottom-10 bg-gradient-to-r from-teal-600 to-cyan-600 p-4 rounded-2xl shadow-lg shadow-teal-500/30 flex items-center space-x-3 hover:rotate-0 transition-transform duration-300">
+                    <div class="text-white">
+                        <p class="text-[10px] font-semibold uppercase tracking-wider opacity-80">Total Applied</p>
+                        <p class="text-xl font-black">124</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-8">
+                <div class="bg-white p-6 rounded-[2rem] shadow-soft border border-slate-100">
+                    <h3 class="text-sm font-bold text-slate-800 mb-4 text-center">Opportunity Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="tierDistributionChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] shadow-soft border border-slate-100">
+                    <h3 class="text-sm font-bold text-slate-800 mb-4 text-center">Top Hiring Hubs</h3>
+                    <div class="chart-container">
+                        <canvas id="locationHubChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Interactive Job Search & Filter -->
+        <section id="vacancies" class="space-y-8">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Active Vacancies Directory</h2>
+                <p class="text-slate-600">Filter active positions in Colombo by keywords, functional tier, or job title match. Find your perfect role.</p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-6 sm:p-8 shadow-soft border border-slate-100 space-y-6">
+                <!-- Filter Controls -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div>
+                        <label for="searchInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Search Keywords</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </div>
+                            <input type="text" id="searchInput" placeholder="e.g. React, Python, Power BI..."
+                                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="tierSelect" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Functional Tier</label>
+                        <select id="tierSelect" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all appearance-none cursor-pointer">
+                            <option value="ALL">All Categories</option>
+                            <option value="Tier 1">Tier 1: Software &amp; Web</option>
+                            <option value="Tier 2">Tier 2: Data Analytics &amp; BI</option>
+                            <option value="Tier 3">Tier 3: Design &amp; Marketing</option>
+                            <option value="Tier 4">Tier 4: Business &amp; Ops</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="locationSelect" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Location</label>
+                        <select id="locationSelect" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all appearance-none cursor-pointer">
+                            <option value="ALL">All Locations</option>
+                            <option value="Colombo">Colombo (Central)</option>
+                            <option value="Kollupitiya">Kollupitiya / Col 03</option>
+                            <option value="Suburbs">Commuter Suburbs</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center text-sm text-slate-500 pt-4 border-t border-slate-100">
+                    <span>Showing <strong id="visibleCount" class="text-slate-900 font-bold bg-teal-50 px-2 py-1 rounded-md">0</strong> matching positions</span>
+                    <button id="resetFilters" class="text-teal-600 hover:text-teal-800 font-bold underline decoration-2 underline-offset-4">Reset Filters</button>
+                </div>
+            </div>
+
+            <!-- Job Cards Dynamic Grid -->
+            <div id="jobGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Populated by app.js -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: Skill Fit & Keyword Gap Matrix -->
+        <section id="fit-analysis" class="bg-white rounded-[2rem] p-6 sm:p-10 shadow-soft border border-slate-100 space-y-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Fit &amp; Keyword Gap Analysis</h2>
+                <p class="text-sm text-slate-600 mt-2">
+                    Select a target job title to analyze verified skill alignments, critical keyword gaps, and practical bridge actions to maximize ATS conversion.
+                </p>
+            </div>
+
+            <!-- Tier Selector Pills -->
+            <div class="flex flex-wrap justify-center gap-3 pb-6">
+                <button class="fit-tier-btn active px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 shadow-md bg-slate-900 text-white" data-tier="1">Tier 1: Software &amp; Web</button>
+                <button class="fit-tier-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200" data-tier="2">Tier 2: Data Analytics</button>
+                <button class="fit-tier-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200" data-tier="3">Tier 3: Design</button>
+                <button class="fit-tier-btn px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200" data-tier="4">Tier 4: Business</button>
+            </div>
+
+            <!-- Gap Cards Container -->
+            <div id="gapMatrixContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Populated by app.js -->
+            </div>
+        </section>
+
+        <!-- SECTION 4: Employer Directory -->
+        <section id="directory" class="bg-white rounded-[2rem] p-6 sm:p-10 shadow-soft border border-slate-100 space-y-8">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-6">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Employer Directory</h2>
+                    <p class="text-sm text-slate-600 mt-2">Direct contact numbers and executive emails for Colombo's top tech firms.</p>
+                </div>
+                <div class="w-full md:w-80 relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="dirSearchInput" placeholder="Search company or email..."
+                        class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all">
+                </div>
+            </div>
+
+            <div class="overflow-x-auto rounded-2xl border border-slate-100">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-600 uppercase text-[11px] font-bold tracking-wider border-b border-slate-200">
+                            <th class="p-4">Organization</th>
+                            <th class="p-4">Address</th>
+                            <th class="p-4">Phone</th>
+                            <th class="p-4">Recruitment Email</th>
+                            <th class="p-4">Focus Areas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="directoryTableBody" class="divide-y divide-slate-100 text-slate-700 bg-white">
+                        <!-- Populated by app.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Strategic Application Roadmap -->
+        <section id="roadmap" class="space-y-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Strategic Application Roadmap</h2>
+                <p class="text-sm text-slate-600 mt-2">A step-by-step career development framework designed to maximize application-to-interview conversion.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-gradient-to-b from-teal-50/50 to-white border border-teal-100 p-6 rounded-[2rem] space-y-4 relative shadow-soft hover:-translate-y-2 transition-transform duration-300">
+                    <span class="absolute -top-4 -right-4 w-12 h-12 bg-teal-600 text-white rounded-full flex items-center justify-center font-black text-xl shadow-lg shadow-teal-500/30">1</span>
+                    <h3 class="text-base font-extrabold text-slate-900 pr-6">Portfolio Positioning</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Frame freelance work as structured commercial client projects. Present client workflows from objective analysis through design to deployment on GitHub Pages.
+                    </p>
+                </div>
+                <div class="bg-gradient-to-b from-cyan-50/50 to-white border border-cyan-100 p-6 rounded-[2rem] space-y-4 relative shadow-soft hover:-translate-y-2 transition-transform duration-300">
+                    <span class="absolute -top-4 -right-4 w-12 h-12 bg-cyan-600 text-white rounded-full flex items-center justify-center font-black text-xl shadow-lg shadow-cyan-500/30">2</span>
+                    <h3 class="text-base font-extrabold text-slate-900 pr-6">Dual-Track Submissions</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong>Track A:</strong> Software &amp; Data (Python, React, SQL).<br>
+                        <strong>Track B:</strong> Business Analysis &amp; Ops (Budgeting, event management).
+                    </p>
+                </div>
+                <div class="bg-gradient-to-b from-blue-50/50 to-white border border-blue-100 p-6 rounded-[2rem] space-y-4 relative shadow-soft hover:-translate-y-2 transition-transform duration-300">
+                    <span class="absolute -top-4 -right-4 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/30">3</span>
+                    <h3 class="text-base font-extrabold text-slate-900 pr-6">Keyword Gap Mitigation</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Bridge full-stack requirements by adding Express/Node backend authentication. Build DAX measures into Power BI projects for analytics roles.
+                    </p>
+                </div>
+                <div class="bg-gradient-to-b from-indigo-50/50 to-white border border-indigo-100 p-6 rounded-[2rem] space-y-4 relative shadow-soft hover:-translate-y-2 transition-transform duration-300">
+                    <span class="absolute -top-4 -right-4 w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-500/30">4</span>
+                    <h3 class="text-base font-extrabold text-slate-900 pr-6">Direct Outreach</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Bypass standard web forms by contacting verified talent acquisition leads directly. Include short cover letters and portfolio links.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =========================================================
+         Footer
+         ========================================================= -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-12 border-t border-slate-800 mt-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-teal-900/20 to-transparent pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3 relative z-10">
+            <div class="flex justify-center items-center space-x-2 mb-4">
+                <div class="bg-teal-600 text-white p-1.5 rounded-lg font-bold text-sm leading-none shadow-lg shadow-teal-500/30">LK</div>
+                <span class="text-white font-bold text-lg tracking-tight">Colombo Tech Careers</span>
+            </div>
+            <p>Employment Directory &amp; Analytics Dashboard</p>
+            <p class="text-slate-500 max-w-xl mx-auto">Data compiled from verified recruitment hubs, tech firm directories, and regional industry reports in Greater Colombo, Sri Lanka.</p>
+        </div>
+    </footer>
+
+    <!-- App Script (ES6 Module) -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
+
